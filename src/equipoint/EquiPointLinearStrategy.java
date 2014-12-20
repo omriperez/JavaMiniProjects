@@ -1,7 +1,7 @@
 package equipoint;
 
 /**
- * Created by shay on 18-12-14.
+ * Created by OP on 18-12-14.
  */
 public class EquiPointLinearStrategy implements EquiPointStrategy {
 
