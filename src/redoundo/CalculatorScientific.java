@@ -18,7 +18,7 @@ public class CalculatorScientific implements Calculator {
 
     public CalculatorScientific(int undoNumLimit) {
         if (undoNumLimit<1) {
-            undoNumLimit =0;
+            undoNumLimit = 0;
         }
         this.undoNumLimit = undoNumLimit;
         // Initialize data structures
@@ -62,31 +62,17 @@ public class CalculatorScientific implements Calculator {
         }
 
         // parse expression. We expect an operator and a value.
-        Pattern r = Pattern.compile("([*\\^/+-])\\s*(\\d*\\.?+\\d+)");
+        Pattern r = Pattern.compile("([-+*/^])\\s*(\\d*\\.?+\\d+)");
         Matcher m = r.matcher(s);
         if (m.find() && m.groupCount() == 2) {
             Operator op;
             double value = Double.parseDouble(m.group(2));
-
+            char operatorCharacter = m.group(1).charAt(0);
             // switch on the operator symbol
-            switch (m.group(1).charAt(0)) {
-                case '+':
-                    op = Operators.ADD.getOperator(value);
-                    break;
-                case '-':
-                    op = Operators.SUBTRACT.getOperator(value);
-                    break;
-                case '*':
-                    op = Operators.MULTIPLY.getOperator(value);
-                    break;
-                case '/':
-                    op = Operators.DIVIDE.getOperator(value);
-                    break;
-                case '^':
-                    op = Operators.POWER.getOperator(value);
-                    break;
-                default: // invalid operator
-                    return false;
+            try {
+                op = OperatorFactory.getOperator(operatorCharacter, value);
+            } catch (IllegalArgumentException e) {
+                return false;
             }
             // perform operation
             if (op!=null) {
@@ -127,8 +113,8 @@ public class CalculatorScientific implements Calculator {
     }
 
     public static void main(String[] args) {
-        System.out.println("The calculator knows the following operations: + - * / ^");
-        System.out.println("\nTo exit type: exit");
+        System.out.println("The calculator knows the following operations: + - * / ^\n");
+        System.out.println("To exit type: exit");
         System.out.println("To undo type: u");
         System.out.println("To redo type: r\n");
         System.out.println("To start add a value to the current value (e.g. +5)");
